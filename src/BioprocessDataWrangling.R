@@ -70,3 +70,53 @@ t <- tibble(x = 1:10,
 print(t, n = 3)
 View(t)
 View(head(t, n = 3))
+
+#-------------------------------------------------------------------------------
+# readr: Read & Write Data
+#-------------------------------------------------------------------------------
+?readr
+
+# Read files with Comma Separated Values (*.csv)
+readr::read_csv("./data/in.csv",
+                col_names = FALSE)
+
+# Read files with Tab Separated Values (*.tsv)
+readr::read_tsv("./data/in.tsv",
+                col_names = FALSE)
+
+# Read in a file, replacing 'world' with 'NA' (Not Available; a missing value)
+readr::read_csv("./data/in.csv",
+                col_names = FALSE,
+                na = c("world")) # change 'world' to 'NA'
+
+# Read files with any delimiter
+file_in_tsv <- readr::read_delim("./data/in.tsv",
+                                  delim = "\t",
+                                  col_names = FALSE)
+file_in_tsv
+
+# Write file as Comma Separated Values (*.csv), with header (by default)
+dir.create("out")
+readr::write_csv(file_in_tsv,
+                 file = "./out/out.csv")
+
+# Write file as Tab Separated Values (*.tsv), withOUT header
+readr::write_tsv(file_in_tsv,
+                 file = "./out/out.tsv",
+                 col_names = FALSE)
+
+# Write files with any delimiter
+readr::write_delim(file_in_tsv,
+                   "./out/out.txt",
+                   delim = "\n")
+
+# To keep track of things, append timestamps to your output filenames. This
+# function creates a safe timestamp that operating systems can handle correctly.
+time_fmt <- function() {
+    gsub('\\s+', 'T', gsub('[-:]', '', Sys.time()))
+}
+
+time_fmt() # Format: yyyymmddThhmmss (delimiter T stands for time)
+
+readr::write_csv(file_in_tsv,
+                 file = paste("./out/", "out.", time_fmt(), ".csv", sep = ""))
