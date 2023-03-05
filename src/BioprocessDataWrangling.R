@@ -79,6 +79,84 @@ head(as_tibble(iris))
 View(as_tibble(iris))
 
 #-------------------------------------------------------------------------------
+# dplyr: The Core of Data Wrangling
+#-------------------------------------------------------------------------------
+# x %>% f(y) becomes f(x,y)
+as_tibble(iris) %>% head()
+
+# Summarise variables (columns) by applying functions to them
+as_tibble(iris) %>%
+    summarise(n = n(),
+              mean(Sepal.Length),
+              sd(Sepal.Length),
+              var(Sepal.Length),
+              IQR(Sepal.Length),
+    )
+
+# select: Extract columns (variables) as a tibble (table)
+as_tibble(iris) %>%
+    select(Sepal.Length, Petal.Length)
+
+# Select variables matching a condition
+as_tibble(iris) %>%
+    select(starts_with("Petal"))
+
+# Remove column X with '-X'
+as_tibble(iris) %>%
+    select(-Species)
+
+# Apply a function across ALL columns
+as_tibble(iris) %>%
+    select(-Species) %>%
+    summarise(across(everything(), mean))
+
+# filter: Keep rows that match a condition
+as_tibble(iris) %>%
+    filter(Species == "virginica", Sepal.Length > 7)
+
+# arrange: Sort in descending order
+as_tibble(iris) %>%
+    filter(Species == "virginica", Sepal.Length > 7) %>%
+    arrange(desc(Sepal.Length))
+
+# distinct: Only keep unique rows (remove duplicates)
+as_tibble(iris) %>%
+    filter(Species == "virginica", Sepal.Length > 7) %>%
+    arrange(desc(Sepal.Length)) %>%
+    distinct(Sepal.Length, .keep_all = TRUE)
+
+# Slice: select rows by index
+as_tibble(iris) %>%
+    filter(Species == "virginica", Sepal.Length > 7) %>%
+    arrange(desc(Sepal.Length)) %>%
+    distinct(Sepal.Length, .keep_all = TRUE) %>%
+    slice(1:2, (n()-1):n())
+
+#-------------------------------------------------------------------------------
+
+# Group rows (cases) by value
+as_tibble(iris) %>%
+    group_by(Species)
+
+# Count number of rows (flowers) in each group (Species)
+as_tibble(iris) %>%
+    group_by(Species) %>%
+    count()
+
+# Summarise using within-group statistics
+as_tibble(iris) %>%
+    group_by(Species) %>%
+    summarise(across(everything(), mean))
+
+# mutate: Make new variables (columns) with functions
+as_tibble(iris) %>%
+    mutate(Sepal.Area = Sepal.Length * Sepal.Width) %>%
+    mutate(Petal.Area = Petal.Length * Petal.Width) %>%
+    group_by(Species) %>%
+    filter(Sepal.Area > 18) %>%
+    summarise(across(everything(), mean))
+
+#-------------------------------------------------------------------------------
 # readr: Read & Write Data
 #-------------------------------------------------------------------------------
 ?readr
