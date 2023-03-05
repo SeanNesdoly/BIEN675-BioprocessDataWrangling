@@ -10,17 +10,24 @@
 # McGill University, Montréal QC
 # 2023-03-21
 #-------------------------------------------------------------------------------
+# @TODO: Install R *and* RStudio from https://posit.co/download/rstudio-desktop
 
 # install.packages("tidyverse") # @TODO: uncomment & run if not yet installed!
 library(tidyverse)
 
-# @TODO: Set working directory to location of 'BioprocessDataWrangling' git
-# repository ('-main' might be a suffix).
-setwd("~/Downloads/BioprocessDataWrangling") # change filepath for your machine!
+# @TODO: Set working directory to location of 'BIEN675-BioprocessDataWrangling'
+# git repository ('-main' might be a suffix).
+setwd("~/Downloads/BIEN675-BioprocessDataWrangling-master") # change filepath for your machine!
+getwd()
 
 #-------------------------------------------------------------------------------
-# tibble: An alternative to the base R 'data.frame()' (a spreadsheet!)
+# tibble: An alternative to R's base::data.frame, this data structure stores
+# collections of variables, much like a spreadsheet (rows & columns).
+#     A column contains values for a single variable.
+#     A row (observation, case) contains an instance/value of each variable.
 #-------------------------------------------------------------------------------
+?tibble::tibble
+
 # Column-wise tibble creation: x & y are variables (columns)
 tibble(x = 1:5,
        y = 5:1)
@@ -57,12 +64,6 @@ tibble(x = 1:5,
        x = 5:1,
        .name_repair = "unique")
 
-# Coerce a data frame (or other base R object) to a tibble
-?iris
-iris_tibble <- as_tibble(iris)
-head(iris_tibble)
-iris_tibble
-
 # Printing & viewing tibbles
 t <- tibble(x = 1:10,
             y = 99)
@@ -70,6 +71,12 @@ t <- tibble(x = 1:10,
 print(t, n = 3)
 View(t)
 View(head(t, n = 3))
+
+# Coerce a data.frame (or other base R object) to type tibble
+?datasets::iris
+as_tibble(iris)
+head(as_tibble(iris))
+View(as_tibble(iris))
 
 #-------------------------------------------------------------------------------
 # readr: Read & Write Data
