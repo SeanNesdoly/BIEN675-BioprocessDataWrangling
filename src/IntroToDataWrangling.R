@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Bioprocess Data Wrangling
+# Introduction to Data Wrangling
 # Week 11: Process Data Management, Storage, and Security
 # BIEN675: Process Analytical Technologies and Data Sciences, Winter 2023
 #
@@ -16,7 +16,7 @@
 library(tidyverse)
 
 # @TODO: Set working directory to location of 'BIEN675-BioprocessDataWrangling'
-# git repository ('-main' might be a suffix).
+# git repository ('-master' will be a suffix if you choose ZIP format).
 setwd("~/Downloads/BIEN675-BioprocessDataWrangling-master") # change filepath for your machine!
 getwd()
 
