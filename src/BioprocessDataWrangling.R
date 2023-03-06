@@ -157,6 +157,55 @@ as_tibble(iris) %>%
     summarise(across(everything(), mean))
 
 #-------------------------------------------------------------------------------
+# ggplot2: Visualize data using the 'Grammar of Graphics'
+#-------------------------------------------------------------------------------
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
+    geom_point()
+
+# Colour points based on flower species
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
+    geom_point(aes(color = Species))
+
+# Fit linear model to data
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
+    geom_point(aes(color = Species)) +
+    geom_smooth(method = lm)
+
+# Plot distributions of petal width stratified by species
+p <- ggplot(iris, aes(x = Species, y = Petal.Width, fill = Species)) +
+         geom_violin(); p;
+
+# Iteratively build on existing plot: add labels
+p <- p + labs(title = "Flower petal width distributions stratified by species.",
+              caption = "Source: R datasets::iris",
+              x = "Flower species",
+              y = "Petal width (cm)"); p;
+
+# Add boxplots showing median, Interquartile Range (IQR), and outliers
+# (defined as below Q1-1.5*IQR and above Q3+1.5*IQR)
+p <- p + geom_boxplot(fill = "white", alpha = 0.9, width = 0.1); p;
+
+# Add theme to change appearance
+p <- p + theme_classic(); p;
+
+# Facets: create subplots based on discrete values in a column (variable)
+p <- ggplot(iris, aes(x = Petal.Width, fill = Species)) +
+         geom_density(alpha = 0.5) +
+         labs(title = "Flower petal width distributions stratified by species.",
+              caption = "Source: R datasets::iris",
+              x = "Petal width (cm)"); p;
+
+p <- p + facet_grid(rows = vars(Species)); p;
+
+# Wrangle dataset, then plot
+as_tibble(iris) %>%
+    mutate(Sepal.Area = Sepal.Length * Sepal.Width) %>%
+    mutate(Petal.Area = Petal.Length * Petal.Width) %>%
+    filter(Sepal.Length >= 5) %>%
+    ggplot(aes(x = Sepal.Area, y = Petal.Area, color = Species)) +
+        geom_point()
+
+#-------------------------------------------------------------------------------
 # readr: Read & Write Data
 #-------------------------------------------------------------------------------
 ?readr
