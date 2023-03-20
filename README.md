@@ -1,6 +1,6 @@
 # BIEN675 Bioprocess Data Wrangling
 
-> Week 11: Process Data Management, Storage, and Security  
+> Week 12: Process Data Management, Storage, and Security  
 > BIEN675: Process Analytical Technologies and Data Sciences, Winter 2023  
 >  
 > Sean Nesdoly  
@@ -8,7 +8,7 @@
 > https://amine-kamen.lab.mcgill.ca/  
 > Department of Bioengineering  
 > McGill University, Montréal QC  
-> 2023-03-21
+> 2023-03-28
 
 ## Setup
 1. Install `R` (the programming language) **and** `RStudio` (an Integrated
@@ -23,3 +23,6 @@
    install.packages("tidyverse")
    library(tidyverse)
    ```
+
+3. A bioprocess dataset will be shared separately via McGill's SharePoint.
+   Please keep it private. When ready, the link will be posted here.
