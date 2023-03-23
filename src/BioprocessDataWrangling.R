@@ -14,7 +14,11 @@
 # install.packages("tidyverse") # @TODO: uncomment & run if not yet installed!
 library(tidyverse)
 
-# @TODO: Set working directory to location of 'BIEN675-BioprocessDataWrangling'
-# git repository ('-master' will be a suffix if you choose ZIP format).
-setwd("~/Downloads/BIEN675-BioprocessDataWrangling-master") # change filepath for your machine!
+# Set working directory to location of 'BIEN675-BioprocessDataWrangling' git
+# repository. @TODO: Change filepath for your machine!
+REPO_FILEPATH <- file.path(path.expand("~"),
+                           "Downloads",
+                           "BIEN675-BioprocessDataWrangling-master",
+                           fsep = .Platform$file.sep)
+setwd(REPO_FILEPATH)
 getwd()

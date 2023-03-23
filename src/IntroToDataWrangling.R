@@ -15,9 +15,13 @@
 # install.packages("tidyverse") # @TODO: uncomment & run if not yet installed!
 library(tidyverse)
 
-# @TODO: Set working directory to location of 'BIEN675-BioprocessDataWrangling'
-# git repository ('-master' will be a suffix if you choose ZIP format).
-setwd("~/Downloads/BIEN675-BioprocessDataWrangling-master") # change filepath for your machine!
+# Set working directory to location of 'BIEN675-BioprocessDataWrangling' git
+# repository. @TODO: Change filepath for your machine!
+REPO_FILEPATH = file.path(path.expand("~"),
+                          "Downloads",
+                          "BIEN675-BioprocessDataWrangling-master",
+                          fsep = .Platform$file.sep)
+setwd(REPO_FILEPATH)
 getwd()
 
 #-------------------------------------------------------------------------------
@@ -211,20 +215,21 @@ as_tibble(iris) %>%
 ?readr
 
 # Read files with Comma Separated Values (*.csv)
-readr::read_csv("./data/in.csv",
+readr::read_csv(file.path("data", "in.csv", fsep = .Platform$file.sep),
                 col_names = FALSE)
 
 # Read files with Tab Separated Values (*.tsv)
-readr::read_tsv("./data/in.tsv",
+readr::read_tsv(file.path("data", "in.tsv", fsep = .Platform$file.sep),
                 col_names = FALSE)
 
 # Read in a file, replacing 'world' with 'NA' (Not Available; a missing value)
-readr::read_csv("./data/in.csv",
+readr::read_csv(file.path("data", "in.csv", fsep = .Platform$file.sep),
                 col_names = FALSE,
                 na = c("world")) # change 'world' to 'NA'
 
 # Read files with any delimiter
-file_in_tsv <- readr::read_delim("./data/in.tsv",
+file_in_tsv <- readr::read_delim(file.path("data", "in.tsv",
+                                           fsep = .Platform$file.sep),
                                   delim = "\t",
                                   col_names = FALSE)
 file_in_tsv
@@ -232,17 +237,17 @@ file_in_tsv
 # Write file as Comma Separated Values (*.csv), with header (by default)
 dir.create("out")
 readr::write_csv(file_in_tsv,
-                 file = "./out/out.csv")
+                 file = file.path("out", "out.csv", fsep = .Platform$file.sep))
 
 # Write file as Tab Separated Values (*.tsv), withOUT header
 readr::write_tsv(file_in_tsv,
-                 file = "./out/out.tsv",
+                 file = file.path("out", "out.tsv", fsep = .Platform$file.sep),
                  col_names = FALSE)
 
 # Write files with any delimiter
 readr::write_delim(file_in_tsv,
-                   "./out/out.txt",
-                   delim = "\n")
+                   file = file.path("out", "out.txt", fsep = .Platform$file.sep),
+                   delim = "\n") # new line character
 
 # To keep track of things, append timestamps to your output filenames. This
 # function creates a safe timestamp that operating systems can handle correctly.
@@ -253,4 +258,6 @@ time_fmt <- function() {
 time_fmt() # Format: yyyymmddThhmmss (delimiter T stands for time)
 
 readr::write_csv(file_in_tsv,
-                 file = paste("./out/", "out.", time_fmt(), ".csv", sep = ""))
+                 file = file.path("out",
+                                  paste("out.", time_fmt(), ".csv", sep = ""),
+                                  fsep = .Platform$file.sep))
