@@ -72,3 +72,35 @@ print(cap_data, n = 10)
 glimpse(cap_data)
 View(head(cap_data, n = 50))
 View(cap_data)
+
+#-------------------------------------------------------------------------------
+# Date and time formats differ between and within sheets:
+#     bp_data (sheet1)
+#         `Time`        : h.hhhhhhhhhhhhhhh   (fractional hours)
+#         `Timestamp`   : dd-mm-yyyy hh:mm:ss
+#     cap_data (sheet2)
+#         `Time & Date` : yyyy-mm-dd hh:mm:ss
+#
+# Note on fractional hours: Excel interprets dates as fractional days; Lucullus
+# uses fractional hours. To convert to fractional days from fractional hours:
+#     time_excel = time_luc * 60 * (1 hour / 60 min) * (1 day / 24 hour)
+#-------------------------------------------------------------------------------
+# Convert `Timestamp` in bp_data to ISO 8601 format ('yyyy-mm-dd hh:mm:ss').
+# This makes it easier to compare datasets.
+parse_timestamp <- function(datetime_str) {
+    # Parse 'dd-mm-yyyy hh:mm:ss'
+    splits <- unlist(str_split(datetime_str, "[- :]"))
+    lubridate::make_datetime(year  = as.integer(splits[3]),
+                             month = as.integer(splits[2]),
+                             day   = as.integer(splits[1]),
+                             hour  = as.integer(splits[4]),
+                             min   = as.integer(splits[5]),
+                             sec   = as.integer(splits[6]),
+                             tz    = Sys.timezone()
+    )
+}
+
+bp_data <- bp_data %>%
+               mutate(datetime = purrr::map_vec(Timestamp, parse_timestamp),
+                      .before = Timestamp) %>%
+               select(-Timestamp) # remove old timestamp column
