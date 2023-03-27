@@ -15,6 +15,16 @@
    Development Environment) from:
    [https://posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop)
 
+   - For Apple machines, please check your CPU type and download the correct
+     version of `R`. To do so, click the Apple logo (top left), then 'About This
+     Mac'. Choose `R` according to below:
+
+     + If `Chip` == `Apple M1/2`, select `R` for `Apple silicon arm64`
+       (R-4.2.3-arm64.pkg)
+
+     + If `Processor` contains the word `Intel`, select `R` for `Intel 64-bit`
+       (R-4.2.3.pkg).
+
 2. Open `RStudio` and install the `tidyverse` packages by executing the
    following code in your Console (located at bottom of window):
 
@@ -24,5 +34,6 @@
    library(tidyverse)
    ```
 
-3. A bioprocess dataset will be shared separately via McGill's SharePoint.
-   Please keep it private. When ready, the link will be posted here.
+3. [McGill SharePoint link to bioprocess dataset](https://mcgill.sharepoint.com/:x:/s/DigitalTwin_Group/EVuf3-KN_iZKmV5SbsQKwXMB62FphjT3LvzEOIFKDhtMSQ?e=ZiuhX5).
+   Please keep data private.
+
