@@ -85,22 +85,11 @@ View(cap_data)
 # uses fractional hours. To convert to fractional days from fractional hours:
 #     time_excel = time_luc * 60 * (1 hour / 60 min) * (1 day / 24 hour)
 #-------------------------------------------------------------------------------
-# Convert `Timestamp` in bp_data to ISO 8601 format ('yyyy-mm-dd hh:mm:ss').
-# This makes it easier to compare datasets.
-parse_timestamp <- function(datetime_str) {
-    # Parse 'dd-mm-yyyy hh:mm:ss'
-    splits <- unlist(str_split(datetime_str, "[- :]"))
-    lubridate::make_datetime(year  = as.integer(splits[3]),
-                             month = as.integer(splits[2]),
-                             day   = as.integer(splits[1]),
-                             hour  = as.integer(splits[4]),
-                             min   = as.integer(splits[5]),
-                             sec   = as.integer(splits[6]),
-                             tz    = Sys.timezone()
-    )
-}
-
+# Convert `Timestamp` in bp_data, formatted as 'dd-mm-yyyy hh:mm:ss', to ISO
+# 8601 format ('yyyy-mm-dd hh:mm:ss'). This makes it easier to compare datasets.
 bp_data <- bp_data %>%
-               mutate(datetime = purrr::map_vec(Timestamp, parse_timestamp),
+               mutate(datetime = parse_date_time(Timestamp,
+                                                 "d-m-Y H:M:S",
+                                                 tz = Sys.timezone()),
                       .before = Timestamp) %>%
                select(-Timestamp) # remove old timestamp column
