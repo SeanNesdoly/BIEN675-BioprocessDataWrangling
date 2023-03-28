@@ -186,6 +186,10 @@ ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
 ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
     geom_point(aes(color = Species))
 
+# Colour points based on flower species, size based on petal length
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
+    geom_point(aes(color = Species, size = Petal.Length))
+
 # Fit linear model to data
 ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
     geom_point(aes(color = Species)) +
