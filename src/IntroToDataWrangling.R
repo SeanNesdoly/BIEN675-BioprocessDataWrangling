@@ -25,6 +25,22 @@ setwd(REPO_FILEPATH)
 getwd()
 
 #-------------------------------------------------------------------------------
+# A few notes to start:
+#
+# - (Scientific) Reproducibility
+#   * Excel spreadsheets vs reproducible scripts to `show your work'.
+#   * Someone should be able to take your raw dataset and completely reproduce
+#     the results that you generate. If not, what is the point of your analysis?
+#     Others must be able to validate your work.
+# - CRUD operations: Create, Read, Update, Delete
+# - Properties for database transactions in DBMS: ACID
+#   * Atomicity
+#   * Consistency
+#   * Isolation
+#   * Durability
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
 # tibble: An alternative to R's base::data.frame, this data structure stores
 # collections of variables, much like a spreadsheet (rows & columns).
 #     A column contains values for a single variable.
@@ -249,6 +265,9 @@ readr::write_delim(file_in_tsv,
                    file = file.path("out", "out.txt", fsep = .Platform$file.sep),
                    delim = "\n") # new line character
 
+
+# Data Provenance (origin)
+#-------------------------------------------------------------------------------
 # To keep track of things, append timestamps to your output filenames. This
 # function creates a safe timestamp that operating systems can handle correctly.
 time_fmt <- function() {
@@ -261,3 +280,7 @@ readr::write_csv(file_in_tsv,
                  file = file.path("out",
                                   paste("out.", time_fmt(), ".csv", sep = ""),
                                   fsep = .Platform$file.sep))
+
+# Can you think of other ways to keep track of ALL of your input AND output?
+# In data science, the idea of data provenanace is incredibly important;
+# unfortunately, it is rarely implemented in ad hoc analyses.
