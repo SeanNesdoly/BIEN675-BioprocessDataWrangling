@@ -200,6 +200,49 @@ cap_data %>%
              caption = now()) +
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+#-------------------------------------------------------------------------------
+# Take-home Exercise: Oxygen Uptake Rate (OUR) calculation
+#
+# Oxygen Uptake Rate is the amount of oxygen consumed by cells per unit of time.
+#
+# We can estimate its value as dO2/dt (ml/s) with the following assumptions:
+#   (a) We ignore periods of time where pure oxygen is actively being sparged
+#       into the reactor.
+#
+#   (b) Under normal conditions, air escapes the reactor via an outlet; here, we
+#       completely ignore all outlet gas streams, thereby focussing only on
+#       oxygen consumption by cells.
+#
+# This simplifies the OUR calculation.
+# Hint: ?lubridate
+#-------------------------------------------------------------------------------
+bp_data %>%
+    ggplot(aes(x = datetime)) +
+        geom_line(aes(y = m_do, colour = m_do)) +
+        scale_x_datetime(date_labels = "%dT%H:%M:%S",
+                         date_breaks = "4 hour") +
+        labs(title = "Dissolved Oxygen (DO)",
+             caption = now()) +
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
+# Zoom in to smaller window of time
+bp_data %>%
+    filter(datetime > bp_data$datetime[10000],
+           datetime < bp_data$datetime[10000] + hours(2)) %>%
+    ggplot(aes(x = datetime)) +
+        geom_line(aes(y = m_do, colour = m_do)) +
+        scale_x_datetime(date_labels = "%dT%H:%M:%S",
+                         date_breaks = "4 hour") +
+        labs(title = "Dissolved Oxygen (DO), smaller window",
+             caption = now()) +
+        theme_linedraw() +
+        theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+# Plot distribution of DO values
+bp_data %>%
+    ggplot(aes(x = m_do)) +
+        geom_density() +
+        labs(title = "Distribution of Dissolved Oxygen (DO)",
+             caption = now())
