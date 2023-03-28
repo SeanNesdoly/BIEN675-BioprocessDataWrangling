@@ -29,7 +29,7 @@ getwd()
 #-------------------------------------------------------------------------------
 # Define filepath to bioprocess dataset
 DATA_FILEPATH <- file.path("data",
-                           "lucullus_bioreactor_data.xlsx",
+                           "lucullus_bioreactor_data.v1.xlsx",
                            fsep = .Platform$file.sep)
 
 # List sheets contained in spreadsheet
@@ -60,17 +60,22 @@ bp_data <- read_xlsx(DATA_FILEPATH,
 # Explore bioprocess data!
 print(bp_data, n = 10)
 glimpse(bp_data)
-View(head(bp_data, n = 50))
+View(head(bp_data, n = 100))
 View(bp_data)
 
 # Parse capacitance data, a latent variable for biomass, from spreadsheet 2
+#   NOTE: In sheet1, we also have two variables from the capacitance probe (sheet2):
+#       bp_data (sheet1)   | cap_data (sheet2)
+#       -------------------------------------
+#       `f_capacitance`    = `Biomass`
+#       `f_conductivity`   = `Conductivity`
 cap_data <- read_xlsx(DATA_FILEPATH,
                       sheet = 2)
 
 # Explore capacitance data!
 print(cap_data, n = 10)
 glimpse(cap_data)
-View(head(cap_data, n = 50))
+View(head(cap_data, n = 100))
 View(cap_data)
 
 #-------------------------------------------------------------------------------
