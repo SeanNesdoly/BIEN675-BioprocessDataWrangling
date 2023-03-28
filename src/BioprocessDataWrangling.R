@@ -99,6 +99,14 @@ bp_data <- bp_data %>%
                       .before = Timestamp) %>%
                select(-Timestamp) # remove old timestamp column
 
+# Make "Time & Date" column the proper type (Date)
+cap_data <- cap_data %>%
+                mutate(datetime = parse_date_time(`Time & Date`,
+                                                  "Y-m-d H:M:S",
+                                                  tz = Sys.timezone()),
+                       .before = `Time & Date`) %>%
+                select(-`Time & Date`) # remove old timestamp column
+
 #-------------------------------------------------------------------------------
 # Explore plotting of core bioprocess variables
 bp_data %>%
@@ -111,6 +119,8 @@ bp_data %>%
                                            "m_temp"   = "red")) + ylab("") +
         scale_x_datetime(date_labels = "%dT%H:%M:%S",
                          date_breaks = "4 hour") +
+        labs(title = "pH, stirring rate, temperature",
+             caption = now()) +
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
@@ -127,6 +137,8 @@ bp_data %>%
                                            "m_temp"   = "red")) + ylab("") +
         scale_x_datetime(date_labels = "%dT%H:%M:%S",
                          date_breaks = "4 hour") +
+        labs(title = "pH, stirring rate, temperature with missing values filled in",
+             caption = now()) +
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
@@ -152,6 +164,42 @@ bp_data_filled %>%
                                            "m_stirrer"= "brown",
                                            "m_temp"   = "red")) + ylab("") +
         scale_x_datetime(date_labels = "%dT%H:%M:%S", date_breaks = "4 hour") +
+        labs(title = "pH, stirring rate, temperature with missing values filled in",
+             caption = now()) +
+        theme_linedraw() +
+        theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+# Plot biomass volume over time (derived from capacitance probe measurements)
+cap_data %>%
+    ggplot(aes(x = datetime)) +
+        geom_line(aes(y = Biomass,      colour = "bio (cells/ml)")) +
+        geom_line(aes(y = Capacitance,  colour = "cap (pF/cm)")) +
+        geom_line(aes(y = Conductivity, colour = "con (mS/cm)")) +
+        scale_colour_manual("", values = c("bio (cells/ml)" = "deeppink",
+                                           "cap (pF/cm)" = "purple",
+                                           "con (mS/cm)" = "orange")) + ylab("") +
+        scale_x_datetime(date_labels = "%dT%H:%M:%S", date_breaks = "4 hour") +
+        labs(title = "Biomass volume measured by an Aber capacitance probe",
+             caption = now()) +
+        theme_linedraw() +
+        theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+# Cleanup capacitance data
+cap_data %>%
+    filter(Biomass > 0, Capacitance > 0, Conductivity > 0) %>%
+    filter(datetime < make_datetime(2022, 08, 29, 11, 00, tz = Sys.timezone())) %>%
+    ggplot(aes(x = datetime)) +
+        geom_line(aes(y = Biomass,      colour = "bio (cells/ml)")) +
+        geom_line(aes(y = Capacitance,  colour = "cap (pF/cm)")) +
+        geom_line(aes(y = Conductivity, colour = "con (mS/cm)")) +
+        scale_colour_manual("", values = c("bio (cells/ml)" = "deeppink",
+                                           "cap (pF/cm)" = "purple",
+                                           "con (mS/cm)" = "orange")) + ylab("") +
+        scale_x_datetime(date_labels = "%dT%H:%M:%S", date_breaks = "4 hour") +
+        labs(title = "Biomass volume measured by an Aber capacitance probe (filtered)",
+             caption = now()) +
+        theme_linedraw() +
+        theme(axis.text.x = element_text(angle = 45, hjust=1))
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
