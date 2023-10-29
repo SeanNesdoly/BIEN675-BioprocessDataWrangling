@@ -1,7 +1,7 @@
 # BIEN675 Bioprocess Data Wrangling
 
 > Week 12: Process Data Management, Storage, and Security  
-> BIEN675: Process Analytical Technologies and Data Sciences, Winter 2023  
+> [BIEN675: Process Analytical Technologies and Data Sciences, Winter 2023](https://www.mcgill.ca/study/2022-2023/courses/bien-675)  
 >  
 > Sean Nesdoly  
 > Viral Vectors and Vaccines Bioprocessing Group  
