@@ -1,14 +1,13 @@
 #-------------------------------------------------------------------------------
 # Introduction to Data Wrangling
-# Week 12: Process Data Management, Storage, and Security
-# BIEN675: Process Analytical Technologies and Data Sciences, Winter 2023
+# BIEN675: Process Analytical Technologies and Data Sciences, Fall 2023
 #
 # Sean Nesdoly
 # Viral Vectors and Vaccines Bioprocessing Group
 # https://amine-kamen.lab.mcgill.ca/
 # Department of Bioengineering
 # McGill University, Montréal QC
-# 2023-03-28
+# 2023-11-21
 #-------------------------------------------------------------------------------
 # @TODO: Install R *and* RStudio from https://posit.co/download/rstudio-desktop
 
@@ -27,13 +26,24 @@ getwd()
 #-------------------------------------------------------------------------------
 # A few notes to start:
 #
-# - (Scientific) Reproducibility
+# - Scientific reproducibility
 #   * Excel spreadsheets vs reproducible scripts to `show your work'.
+#
 #   * Someone should be able to take your raw dataset and completely reproduce
 #     the results that you generate. If not, what is the point of your analysis?
 #     Others must be able to validate your work.
+#
+#   * jmp's 'Workflow Builder' records actions in an 'Enhanced Log' for reuse.
+#     - JSL = JMP Scripting Language
+#       * NOT a complete command-line interface for using jmp.
+#     - Restricted to sharing your *.jmpflow workflow with others that have an
+#       active jmp license.
+#     - Extremely powerful software, but the subscription-based license is
+#       prohibitively costly ($1000+/year).
+#
 # - CRUD operations: Create, Read, Update, Delete
-# - Properties for database transactions in DBMS: ACID
+#
+# - Properties for database transactions in DataBase Management Systems: ACID
 #   * Atomicity
 #   * Consistency
 #   * Isolation
@@ -79,7 +89,7 @@ tribble(~item,   ~n,
         "Banana", 2,
         "Carrot", 3)
 
-# Fixing variable (column) names
+# Sensible defaults: fixing variable (column) names
 tibble(x = 1:5,
        x = 5:1,
        .name_repair = "unique")
@@ -97,6 +107,14 @@ View(head(t, n = 3))
 as_tibble(iris)
 head(as_tibble(iris))
 View(as_tibble(iris))
+
+# Tibble tidbits:
+#   Data 'types' are consistently applied with reasonable expectations.
+#     https://tibble.tidyverse.org/articles/types.html
+#
+#   Lazy evaluation improves performance, most of the time.
+#
+#   Helpful features for printing & subsetting data (compared to data.frame's).
 
 #-------------------------------------------------------------------------------
 # dplyr: The Core of Data Wrangling
