@@ -151,10 +151,11 @@ bp_data %>%
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
-# Fill in missing values for measurement process variables (prefix "m_")
-# @TODO: Can you think of another solution to deal with missing values?
+# Fill in missing values for process variables with prefix "m_" (measurements)
+# by COPYING values DOWN the column.
+#     @TODO: Can you think of other solutions to deal with missing values?
 bp_data %>%
-    fill(starts_with("m_", ignore.case = FALSE), .direction = "downup") %>%
+    fill(starts_with("m_", ignore.case = FALSE), .direction = "down") %>%
     ggplot(aes(x = datetime)) +
         geom_line(aes(y = m_ph,      colour = "m_ph")) +
         geom_line(aes(y = m_stirrer, colour = "m_stirrer")) +
@@ -169,32 +170,19 @@ bp_data %>%
         theme_linedraw() +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
-# Fill in missing values for:
-#     Measurement variables  (prefix "m_")
-#     Biomass variables      (prefix "f_")
-#     Dose monitor variables (prefix "dm_")
+# Alternatively, we may choose to INTERPOLATE missing values by estimating or
+# calculating them from the surrounding KNOWN values.
 #
-# For all filled-in process variables, we are making the assumption that the
-# biology does not change. This is important to keep in mind when making
+# @TODO: Find suitable methods to fill in OR interpolate missing values for:
+#     1. Measurement variables  (prefix "m_")
+#     2. Biomass variables      (prefix "f_")
+#     3. Dose monitor variables (prefix "dm_")
+#            (integral of corresponding measurement over time)
+#
+# NOTE: For all filled-in/interpolated process variables, we are making the
+# assumption that the underlying biology does not significantly change for the
+# timepoints with missing data. This is important to keep in mind when making
 # conclusions!
-bp_data_filled <- bp_data %>%
-                      fill(starts_with("m_", ignore.case = FALSE), .direction = "downup") %>%
-                      fill(starts_with("dm_"), .direction = "downup")
-
-# Create new time-series plot with 'filled-in' dataset
-bp_data_filled %>%
-    ggplot(aes(x = datetime)) +
-        geom_line(aes(y = m_ph,      colour = "m_ph")) +
-        geom_line(aes(y = m_stirrer, colour = "m_stirrer")) +
-        geom_line(aes(y = m_temp,    colour = "m_temp")) +
-        scale_colour_manual("", values = c("m_ph"     = "green",
-                                           "m_stirrer"= "brown",
-                                           "m_temp"   = "red")) + ylab("") +
-        scale_x_datetime(date_labels = "%dT%H:%M:%S", date_breaks = "4 hour") +
-        labs(title = "pH, stirring rate, temperature with missing values filled in",
-             caption = now()) +
-        theme_linedraw() +
-        theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 # Plot biomass volume over time (derived from capacitance probe measurements)
 cap_data %>%
