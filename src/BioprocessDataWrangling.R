@@ -229,11 +229,14 @@ cap_data %>%
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 #-------------------------------------------------------------------------------
-# Take-home Exercise: Oxygen Uptake Rate (OUR) calculation
-#
+# Take-home Exercise: Estimate Oxygen Uptake Rate (OUR)
+#-------------------------------------------------------------------------------
 # Oxygen Uptake Rate is the amount of oxygen consumed by cells per unit of time.
 #
-# We can estimate its value as dO2/dt (ml/s) with the following assumptions:
+# We can estimate it for some time `t` given Dissolved Oxygen (DO) measurements
+# (% O2 saturation of sterile medium) and their corresponding timestamps.
+#
+# We can estimate its value as dO2/dt (%/s) with the following assumptions:
 #   (a) We ignore periods of time where pure oxygen is actively being sparged
 #       into the reactor.
 #
@@ -241,8 +244,24 @@ cap_data %>%
 #       completely ignore all outlet gas streams, thereby focussing only on
 #       oxygen consumption by cells.
 #
-# This simplifies the OUR calculation.
-# Hint: ?lubridate
+# These assumptions simplify the OUR calculation.
+#
+# In bioreactors, DO is typically controlled using a (cascading) algorithm:
+#     DO BELOW setpoint --> increase stir rate; sparge air, then O2
+#     DO ABOVE setpoint --> sparge nitrogen to strip O2 into headspace
+#
+# Some things to think about:
+#     1. What impact does the rate of DO measurement have on your algorithm?
+#     2. What characteristics would your ideal DO probe/sensor have?
+#     3. Consider assessing DO variability.
+#     4. How might you alter, or parameterize, your dO2/dt calculation?
+#        How does changing this parameter impact its accuracy?
+#
+# Sean's words of wisdom: critically thinking about a problem is important;
+# however, actually implementing a working solution demonstrates real
+# understanding. There are MANY solutions, not just one. Be creative!
+#
+# Hint: ?lubridate::interval
 #-------------------------------------------------------------------------------
 bp_data %>%
     ggplot(aes(x = datetime)) +
@@ -261,7 +280,7 @@ bp_data %>%
     ggplot(aes(x = datetime)) +
         geom_line(aes(y = m_do, colour = m_do)) +
         scale_x_datetime(date_labels = "%dT%H:%M:%S",
-                         date_breaks = "4 hour") +
+                         date_breaks = "10 min") +
         labs(title = "Dissolved Oxygen (DO), smaller window",
              caption = now()) +
         theme_linedraw() +
