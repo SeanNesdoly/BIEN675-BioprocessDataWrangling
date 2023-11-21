@@ -33,11 +33,13 @@ getwd()
 #     the results that you generate. If not, what is the point of your analysis?
 #     Others must be able to validate your work.
 #
-#   * jmp's 'Workflow Builder' records actions in an 'Enhanced Log' for reuse.
+#   * JMP's 'Workflow Builder' records actions in an 'Enhanced Log' for reuse.
 #     - JSL = JMP Scripting Language
-#       * NOT a complete command-line interface for using jmp.
+#       * Script/automate analyses and visualizations.
+#       * NOT a complete command-line interface for using JMP.
+#       * SAS, Python, R, and MATLAB code can be executed from JSL (apparently).
 #     - Restricted to sharing your *.jmpflow workflow with others that have an
-#       active jmp license.
+#       active JMP license.
 #     - Extremely powerful software, but the subscription-based license is
 #       prohibitively costly ($1000+/year).
 #
