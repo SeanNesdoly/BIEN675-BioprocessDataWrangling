@@ -60,6 +60,35 @@ glimpse(bp_data)
 View(head(bp_data, n = 100))
 View(bp_data)
 
+#-------------------------------------------------------------------------------
+# Device/sensor measurement modes for use with Supervisory Control and Data
+# Acquisition (SCADA) systems:
+#     ACTIVE
+#         Define an interval to log measurements (should be a multiple of the
+#         device's communication interval).
+#
+#     PASSIVE
+#         Log measurements when the device sends updates.
+#
+#     CHANGES ONLY
+#         Only log the current value X[i] when it moves out of its DEADBAND
+#         zone. This can be enforced by the device OR the logger/SCADA system
+#         itself. Often, values are logged at a default time interval, too.
+#
+#         If X[n] is the previously logged value, only log X[i], where i > n,
+#         when the below equation is satisfied:
+#             DEADBAND > |X[i] - X[n]|
+#
+# Critical Process Parameters (CPPs):
+#     DO, pH, stir rate, temperature, metabolite concentrations, total & viable
+#     cell densities, viability, biomass
+#
+# Critical Quality Attributes (CQAs):
+#     product quality, quantity/titer, size, glycosylation
+#
+# AT-, ON-, and IN-line measurements.
+#-------------------------------------------------------------------------------
+
 # Parse capacitance data, a latent variable for biomass, from spreadsheet 2
 #   NOTE: In sheet1, we also have two variables from the capacitance probe:
 #       bp_data (sheet1)   | cap_data (sheet2)
