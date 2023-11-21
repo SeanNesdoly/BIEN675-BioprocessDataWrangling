@@ -1,14 +1,13 @@
 #-------------------------------------------------------------------------------
 # Bioprocess Data Wrangling
-# Week 12: Process Data Management, Storage, and Security
-# BIEN675: Process Analytical Technologies and Data Sciences, Winter 2023
+# BIEN675: Process Analytical Technologies and Data Sciences, Fall 2023
 #
 # Sean Nesdoly
 # Viral Vectors and Vaccines Bioprocessing Group
 # https://amine-kamen.lab.mcgill.ca/
 # Department of Bioengineering
 # McGill University, Montréal QC
-# 2023-03-28
+# 2023-11-21
 #-------------------------------------------------------------------------------
 
 # install.packages("tidyverse") # @TODO: uncomment & run if not yet installed!
@@ -36,16 +35,14 @@ DATA_FILEPATH <- file.path("data",
 readxl::excel_sheets(DATA_FILEPATH)
 
 # Peak at bioprocess data from spreadsheet 1
-View(readxl::read_xlsx(DATA_FILEPATH,
-                       sheet = 1,
-                       n_max = 100))
+View(readxl::read_xlsx(DATA_FILEPATH, sheet = 1, n_max = 100))
 
 # Extract bioprocess variable metadata
 bp_metadata <- read_xlsx(DATA_FILEPATH,
                          sheet = 1,
                          col_names = FALSE,
                          n_max = 6) %>%
-                   t() %>%
+                   t() %>% # transpose data frame (rows become columns & vice versa)
                    as_tibble() %>%
                    rename(c("ProcessVariable"=V1, "Unit"=V2, "DeviceType"=V3,
                             "Device"=V4, "Reactor"=V5, "ProcessName"=V6))
@@ -64,13 +61,12 @@ View(head(bp_data, n = 100))
 View(bp_data)
 
 # Parse capacitance data, a latent variable for biomass, from spreadsheet 2
-#   NOTE: In sheet1, we also have two variables from the capacitance probe (sheet2):
+#   NOTE: In sheet1, we also have two variables from the capacitance probe:
 #       bp_data (sheet1)   | cap_data (sheet2)
 #       -------------------------------------
 #       `f_capacitance`    = `Biomass`
 #       `f_conductivity`   = `Conductivity`
-cap_data <- read_xlsx(DATA_FILEPATH,
-                      sheet = 2)
+cap_data <- read_xlsx(DATA_FILEPATH, sheet = 2)
 
 # Explore capacitance data!
 print(cap_data, n = 10)
@@ -81,13 +77,13 @@ View(cap_data)
 #-------------------------------------------------------------------------------
 # Date and time formats differ between and within sheets:
 #     bp_data (sheet1)
-#         `Time`        : h.hhhhhhhhhhhhhhh   (fractional hours)
-#         `Timestamp`   : dd-mm-yyyy hh:mm:ss
+#         `Time`        --> h.hhhhhhhhhhhhhhh   (fractional hours)
+#         `Timestamp`   --> dd-mm-yyyy hh:mm:ss
 #     cap_data (sheet2)
-#         `Time & Date` : yyyy-mm-dd hh:mm:ss
+#         `Time & Date` --> yyyy-mm-dd hh:mm:ss
 #
-# Note on fractional hours: Excel interprets dates as fractional days; Lucullus
-# uses fractional hours. To convert to fractional days from fractional hours:
+# NOTE: Excel interprets dates as fractional days; Lucullus uses fractional
+# hours. To convert to fractional days from fractional hours:
 #     time_excel = time_luc * 60 * (1 hour / 60 min) * (1 day / 24 hour)
 #-------------------------------------------------------------------------------
 # Convert `Timestamp` in bp_data, formatted as 'dd-mm-yyyy hh:mm:ss', to ISO
@@ -96,8 +92,9 @@ bp_data <- bp_data %>%
                mutate(datetime = parse_date_time(Timestamp,
                                                  "d-m-Y H:M:S",
                                                  tz = Sys.timezone()),
-                      .before = Timestamp) %>%
+                      .before = Timestamp) %>% # control location of new column
                select(-Timestamp) # remove old timestamp column
+head(bp_data)
 
 # Make "Time & Date" column the proper type (Date)
 cap_data <- cap_data %>%
@@ -106,6 +103,7 @@ cap_data <- cap_data %>%
                                                   tz = Sys.timezone()),
                        .before = `Time & Date`) %>%
                 select(-`Time & Date`) # remove old timestamp column
+head(cap_data)
 
 #-------------------------------------------------------------------------------
 # Explore plotting of core bioprocess variables
